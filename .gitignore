@@ -9,3 +9,4 @@ dist/
 *.zip
 tmp*/
 .pytest_cache/
+data/

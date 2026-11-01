@@ -1,5 +1,6 @@
 """本地记录：用 SQLite 保存喝水时间、提醒间隔和宠物名字。"""
 
+import sys
 import sqlite3
 from collections import Counter
 from datetime import date, datetime, timedelta
@@ -9,11 +10,12 @@ from PySide6.QtCore import QStandardPaths
 
 
 def default_database_path() -> Path:
-    """Windows 上使用当前用户的本地应用数据目录。"""
-    root = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-    if not root:
-        raise OSError("无法找到应用数据目录")
-    return database_path_for_app(Path(root))
+    base = (
+        Path(sys.executable).resolve().parent
+        if getattr(sys, "frozen", False)
+        else Path(__file__).resolve().parent
+    )
+    return base / "data" / "sipcat.sqlite3"
 
 
 def database_path_for_app(app_data_dir: Path) -> Path:
